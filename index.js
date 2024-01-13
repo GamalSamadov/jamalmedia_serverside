@@ -10,10 +10,14 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import { register } from './controllers/auth.js'
 import { createPost } from "./controllers/posts.js"
+// import { posts, users } from "./data/index.js"
 import { verifyToken } from './middleware/auth.js'
+// import Post from "./models/Post.js"
+// import User from './models/User.js'
 import authRoutes from "./routes/auth.js"
 import postRoutes from "./routes/posts.js"
 import userRoutes from "./routes/user.js"
+
 
 
 /* CONFIGURATION */
@@ -58,6 +62,13 @@ mongoose.connect(process.env.MONGO_URL, {
 }).then(() => {
 	app.listen(PORT, () => {
 		console.log(`listening on port: ${PORT}`)
+
+		// Insert fake data
+		
+		// User.insertMany(users)
+		// console.log("Fake Users inserted successfully")
+		// Post.insertMany(posts)
+		// console.log("Fake Posts inserted successfully")
 	})
 }).catch((err) => {
 	console.log(`${err} did not connect`) 
