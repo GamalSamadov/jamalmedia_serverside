@@ -1,5 +1,45 @@
-import Post from "../models/Post.js";
-import User from "../models/User.js";
+import Post from "../models/Post.js"
+import User from "../models/User.js"
+
+export const getPostById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const post = await Post.findById(id)
+    res.status(200).json(post);
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
+}
+
+export const updatePost = async (req, res) => {
+  try {
+    const { description } = req.body
+    const { id } = req.params
+
+    if (!description) return
+
+    const post = await Post.findOneAndUpdate({ _id: id }, { description: description }, { returnOriginal: false })
+
+    const userPosts = await Post.find({ userId: post.userId });
+    res.status(200).json(userPosts);
+    
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
+}
+
+export const deletePost = async (req, res) => {
+  try {
+    
+    const { id } = req.params
+    await Post.deleteOne({ _id: id })
+
+    res.status(200)
+
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
+}
 
 /* CREATE */
 export const createPost = async (req, res) => {
