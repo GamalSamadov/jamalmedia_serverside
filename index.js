@@ -49,6 +49,18 @@ app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/posts", postRoutes);
 
+app.use((err, req, res, next) => {
+  if(err.name === 'MongoError' || err.name === 'ValidationError' || err.name === 'CastError'){
+      err.status = 422;
+  }
+  if(req.get('accept').includes('json')){
+      res.status(err.status || 500).json({message: err.message || 'some error eccured.'});
+  } else {
+      res.status(err.status || 500).sendFile(path.join(__dirname, 'public', 'index.html'));
+  }
+});
+
+
 const PORT = process.env.PORT || 6001;
 mongoose
   .connect(process.env.MONGO_URL, {
