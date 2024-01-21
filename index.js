@@ -31,7 +31,7 @@ app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors(
   {
-    origin: ["https://hsoub-client.onrender.com", "https://hsoubgram.onrender.com", "https://hsoubgram.vercel.app", "http://localhost:3000", "https://hsoubgram-87870483e74f.herokuapp.com/"],
+    origin: ["https://hsoubgram.vercel.app", "http://localhost:3000", "https://hsoubgram-87870483e74f.herokuapp.com"],
     methods: ["POST", "GET", "PATCH", "DELETE"],
     credentials: true
   }
