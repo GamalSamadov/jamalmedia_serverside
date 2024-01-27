@@ -19,65 +19,70 @@ import userRoutes from "./routes/users.js"
 // import { users, posts } from "./data/index.js";
 
 /* CONFIGURATIONS */
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-dotenv.config();
-const app = express();
-app.use(express.json());
-app.use(helmet());
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+dotenv.config()
+const app = express()
+app.use(express.json())
+app.use(helmet())
 app.use(express.static(path.join(__dirname, "public")))
-app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
-app.use(morgan("common"));
-app.use(bodyParser.json({ limit: "30mb", extended: true }));
-app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
+app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }))
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+  })
+)
+app.use(morgan("common"))
+app.use(bodyParser.json({ limit: "30mb", extended: true }))
+app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }))
 app.use(cors(
   {
-    origin: ["https://hsoubgram.vercel.app", "http://localhost:3000", "https://hsoubgram-app-bf104640da73.herokuapp.com"],
+    origin: ["http://localhost:3000", process.env.CLIENTSIDE_URL],
     methods: ["POST", "GET", "PATCH", "DELETE"],
     credentials: true
   }
-));
-app.use("/assets", express.static(path.join(__dirname, "public/assets")));
+))
+app.use("/assets", express.static(path.join(__dirname, "public/assets")))
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "public/assets");
+    cb(null, "public/assets")
   },
   filename: function (req, file, cb) {
-    cb(null, file.originalname);
+    cb(null, file.originalname)
   },
-});
-const upload = multer({ storage });
+})
+const upload = multer({ storage })
 
-app.post("/auth/register", upload.single("picture"), register);
-app.post("/posts", verifyToken, upload.single("picture"), createPost);
+app.post("/auth/register", upload.single("picture"), register)
+app.post("/posts", verifyToken, upload.single("picture"), createPost)
 
-app.use("/auth", authRoutes);
-app.use("/users", userRoutes);
-app.use("/posts", postRoutes);
+app.use("/auth", authRoutes)
+app.use("/users", userRoutes)
+app.use("/posts", postRoutes)
 
 app.use((err, req, res, next) => {
-  if(err.name === 'MongoError' || err.name === 'ValidationError' || err.name === 'CastError'){
-      err.status = 422;
+  if (err.name === 'MongoError' || err.name === 'ValidationError' || err.name === 'CastError') {
+    err.status = 422
   }
-  if(req.get('accept').includes('json')){
-      res.status(err.status || 500).json({message: err.message || 'some error eccured.'});
+  if (req.get('accept').includes('json')) {
+    res.status(err.status || 500).json({ message: err.message || 'some error eccured.' })
   } else {
-      res.status(err.status || 500).sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.status(err.status || 500).sendFile(path.join(__dirname, 'public', 'index.html'))
   }
-});
+})
 
-
-const PORT = process.env.PORT || 6001;
+const PORT = process.env.PORT || 6001
 mongoose
   .connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
   .then(() => {
-    app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
+    app.listen(PORT, () => console.log(`Server Port: ${PORT}`))
 
     // User.insertMany(users);
     // Post.insertMany(posts);
   })
   .catch((error) => console.log(`${error} did not connect`));
+
