@@ -25,7 +25,7 @@ dotenv.config()
 const app = express()
 app.use(express.json())
 app.use(helmet())
-app.use(express.static(path.join(__dirname, "public")))
+app.use(express.static(path.join(__dirname, "/public")))
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }))
 app.use(
   helmet({
@@ -42,7 +42,7 @@ app.use(cors(
     credentials: true
   }
 ))
-app.use("/assets", express.static(path.join(__dirname, "public/assets")))
+// app.use("/assets", express.static(path.join(__dirname, "public/assets")))
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
