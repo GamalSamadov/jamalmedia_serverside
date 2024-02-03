@@ -40,7 +40,7 @@ app.use(cors(
   }
 ))
 app.use(createProxyMiddleware({
-  target: 'http://localhost:3000/', //original url
+  target: 'https://hsoub-api.onrender.com', //original url
   changeOrigin: true,
   //secure: false,
   onProxyRes: function (proxyRes, req, res) {
