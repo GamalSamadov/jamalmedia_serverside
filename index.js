@@ -3,7 +3,6 @@ import cors from "cors"
 import dotenv from "dotenv"
 import express from "express"
 import helmet from "helmet"
-import { createProxyMiddleware } from "http-proxy-middleware"
 import mongoose from "mongoose"
 import morgan from "morgan"
 import multer from "multer"
@@ -39,14 +38,6 @@ app.use(cors(
     optionSuccessStatus: 200,
   }
 ))
-app.use(createProxyMiddleware({
-  target: 'https://hsoub-api.onrender.com', //original url
-  changeOrigin: true,
-  //secure: false,
-  onProxyRes: function (proxyRes, req, res) {
-    proxyRes.headers['Access-Control-Allow-Origin'] = '*'
-  }
-}))
 
 // app.use("/assets", express.static(path.join(__dirname, "public/assets")))
 
