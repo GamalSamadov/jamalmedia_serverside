@@ -31,16 +31,10 @@ app.use(morgan("common"))
 app.use(bodyParser.json({ limit: "30mb", extended: true }))
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }))
 
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*")
-  res.header("Access-Control-Allow-Headers", "X-Requested-With")
-  next()
-})
-
 app.use(cors(
   {
     origin: [process.env.CLIENTSIDE_URL, "http://localhost:3000"],
-    methods: ["POST", "GET", "PATCH", "DELETE"],
+    methods: ["*"],
     credentials: true,
     optionSuccessStatus: 200,
   }
