@@ -30,9 +30,10 @@ app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }))
 app.use(morgan("common"))
 app.use(bodyParser.json({ limit: "30mb", extended: true }))
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }))
+
 app.use(cors(
   {
-    origin: [process.env.CLIENTSIDE_URL, "http://localhost:3000/"],
+    origin: [process.env.CLIENTSIDE_URL, "http://localhost:3000"],
     methods: ["POST", "GET", "PATCH", "DELETE"],
     credentials: true,
     optionSuccessStatus: 200,
