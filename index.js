@@ -3,6 +3,7 @@ import cors from "cors"
 import dotenv from "dotenv"
 import express from "express"
 import helmet from "helmet"
+import { createProxyMiddleware } from "http-proxy-middleware"
 import mongoose from "mongoose"
 import morgan from "morgan"
 import multer from "multer"
@@ -34,9 +35,19 @@ app.use(cors(
   {
     origin: [process.env.CLIENTSIDE_URL, "http://localhost:3000",],
     methods: ["POST", "GET", "PATCH", "DELETE"],
-    credentials: true
+    credentials: true,
+    optionSuccessStatus: 200,
   }
 ))
+app.use(createProxyMiddleware({
+  target: 'http://localhost:3000/', //original url
+  changeOrigin: true,
+  //secure: false,
+  onProxyRes: function (proxyRes, req, res) {
+    proxyRes.headers['Access-Control-Allow-Origin'] = '*'
+  }
+}))
+
 // app.use("/assets", express.static(path.join(__dirname, "public/assets")))
 
 const storage = multer.diskStorage({
